@@ -125,10 +125,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const photoFileInput = document.getElementById('photoFileInput');
     const profileAvatarImg = document.getElementById('profileAvatarImg');
 
-    // Load saved photo if exists in localStorage
-    const savedPhoto = localStorage.getItem('sasikumar_profile_photo');
-    if (savedPhoto && profileAvatarImg) {
-        profileAvatarImg.src = savedPhoto;
+    // Clean up stale previous placeholder avatar cache from localStorage
+    localStorage.removeItem('sasikumar_profile_photo');
+    localStorage.removeItem('sasikumar_custom_photo_v2');
+
+    // Explicitly set the avatar image to the official suit portrait
+    if (profileAvatarImg) {
+        profileAvatarImg.src = 'assets/images/sasikumar_photo.png';
     }
 
     if (photoUploadOverlay && photoFileInput) {
@@ -151,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         profileAvatarImg.src = dataUrl;
                     }
                     try {
-                        localStorage.setItem('sasikumar_profile_photo', dataUrl);
+                        localStorage.setItem('sasikumar_custom_photo_v2', dataUrl);
                         showToast('Profile photo updated and saved successfully! 🎉');
                     } catch (err) {
                         showToast('Profile photo updated for this session!');
