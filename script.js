@@ -281,19 +281,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ----------------------------------------------------------------------
-    // 7. Contact Form Simulation & Toast
+    // 7. Contact Form Direct Email Submission (via FormSubmit API)
     // ----------------------------------------------------------------------
     const contactForm = document.getElementById('contactForm');
     const submitFormBtn = document.getElementById('submitFormBtn');
 
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const name = document.getElementById('userName').value.trim();
             const email = document.getElementById('userEmail').value.trim();
+            const subject = document.getElementById('userSubject').value.trim();
+            const message = document.getElementById('userMessage').value.trim();
 
-            if (!name || !email) {
+            if (!name || !email || !message) {
                 showToast('Please fill out all required form fields.');
                 return;
             }
@@ -301,12 +303,36 @@ document.addEventListener('DOMContentLoaded', () => {
             submitFormBtn.disabled = true;
             submitFormBtn.innerHTML = `<span>Sending...</span> <i class="fa-solid fa-spinner fa-spin"></i>`;
 
-            setTimeout(() => {
-                contactForm.reset();
+            try {
+                const response = await fetch('https://formsubmit.co/ajax/sasikumarsabbana@gmail.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        Name: name,
+                        Email: email,
+                        Subject: subject || 'Portfolio Contact Inquiry',
+                        Message: message,
+                        _subject: `New Portfolio Message from ${name}: ${subject || 'Contact Inquiry'}`,
+                        _template: 'table',
+                        _captcha: 'false'
+                    })
+                });
+
+                if (response.ok) {
+                    contactForm.reset();
+                    showToast(`Thank you ${name}! Your message has been sent to my email. 🚀`);
+                } else {
+                    contactForm.submit();
+                }
+            } catch (err) {
+                contactForm.submit();
+            } finally {
                 submitFormBtn.disabled = false;
                 submitFormBtn.innerHTML = `<span>Submit Message</span> <i class="fa-solid fa-paper-plane"></i>`;
-                showToast(`Thank you ${name}! Your message has been sent successfully. 🚀`);
-            }, 1200);
+            }
         });
     }
 
