@@ -1,0 +1,16 @@
+{
+  "name": "sabbana-sasikumar-portfolio",
+  "version": "1.0.0",
+  "description": "Portfolio of Sabbana Sasikumar - Aspiring Full-Stack Developer",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "portfolio",
+    "full-stack",
+    "developer"
+  ],
+  "author": "Sabbana Sasikumar",
+  "license": "ISC"
+}
