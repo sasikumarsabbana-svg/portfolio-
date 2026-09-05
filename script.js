@@ -119,10 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // 3. Profile Photo Upload & LocalStorage Persistence
+    // 3. Profile Photo Configuration
     // ----------------------------------------------------------------------
-    const photoUploadOverlay = document.getElementById('photoUploadOverlay');
-    const photoFileInput = document.getElementById('photoFileInput');
     const profileAvatarImg = document.getElementById('profileAvatarImg');
 
     // Clean up stale previous placeholder avatar cache from localStorage
@@ -132,37 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Explicitly set the avatar image to the official suit portrait
     if (profileAvatarImg) {
         profileAvatarImg.src = 'assets/images/sasikumar_photo.png';
-    }
-
-    if (photoUploadOverlay && photoFileInput) {
-        photoUploadOverlay.addEventListener('click', () => {
-            photoFileInput.click();
-        });
-
-        photoFileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                if (!file.type.startsWith('image/')) {
-                    showToast('Please select a valid image file (JPEG, PNG, etc.)');
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const dataUrl = event.target.result;
-                    if (profileAvatarImg) {
-                        profileAvatarImg.src = dataUrl;
-                    }
-                    try {
-                        localStorage.setItem('sasikumar_custom_photo_v2', dataUrl);
-                        showToast('Profile photo updated and saved successfully! 🎉');
-                    } catch (err) {
-                        showToast('Profile photo updated for this session!');
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-        });
     }
 
     // ----------------------------------------------------------------------
